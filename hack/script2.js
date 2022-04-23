@@ -910,18 +910,32 @@ function GetResult() {
 
 var checkresult;
 var done;
-//window.check = CheckValue;
-//window.generate = Generate;
 
 
-var alpha = "ABCDEFGHI";//JKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+var crypto = new bCrypt();
+var hash = "$2a$11$PMmOUSKkkhJJHLvjO/GV7uxpdDYxHvs58jGAMrfD9hKJEkv/pIgY.";
+var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 var N = alpha.length;
 
 function dfs(pos, pw) {
 	pw += alpha[pos];
 	if (pw.length == 7) {
-		Verify(pw);
-		//console.log(pw);
+        
+		crypto.checkpw(
+            pw,
+            hash,
+            function(res){
+                if (res) {
+                    console.log("Valid");
+                    console.log(pw);
+                } 
+            },
+            function() {
+                // No-op
+                done = false;
+            }
+        );
+        
 		return;
 	}
 	for (var i = 0; i < N; i++) {
@@ -929,9 +943,8 @@ function dfs(pos, pw) {
 	}
 }
 
-//console.log(N);
 for (var i = 0; i < N; i++) {
-	//console.log(i);
+	console.log(alpha[i]);
 	var str = "";
 	dfs(i, str);
 }
